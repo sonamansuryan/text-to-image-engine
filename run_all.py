@@ -92,7 +92,6 @@ def run_train(config: dict):
     _banner(f"Training done in {train_time:.1f} min ✅")
     logger.info(f"Training complete — {train_time:.1f} min")
 
-    # Ջնջել VRAM-ից՝ evaluate-ից առաջ
     del models, dataset, trainer
     torch.cuda.empty_cache()
 

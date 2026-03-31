@@ -3,12 +3,10 @@ import torch
 from diffusers import StableDiffusionPipeline
 from peft import PeftModel
 
-# Մոդելի բեռնում
 pipe = StableDiffusionPipeline.from_pretrained(
     "runwayml/stable-diffusion-v1-5",
     torch_dtype=torch.float16
 )
-# pipe.unet = PeftModel.from_pretrained(pipe.unet, "./outputs") # Հանեք մեկնաբանությունից, եթե LoRA ունեք
 pipe = pipe.to("cuda")
 
 def generate(prompt, negative_prompt, steps, guidance, width, height):
@@ -53,7 +51,6 @@ body, .gradio-container {
     display: inline;
 }
 
-/* Պանելների դիզայնը */
 #left-panel {
     background: #fdfaf7 !important;
     border: 1.5px solid #e0d6cc !important;
@@ -71,7 +68,6 @@ body, .gradio-container {
     align-items: stretch !important;
 }
 
-/* Նկարը ստիպում ենք լրացնել ԱՄԲՈՂՋ քառակուսին */
 #right-panel .image-container, 
 #right-panel img,
 #right-panel .preview {
@@ -82,7 +78,6 @@ body, .gradio-container {
     margin: 0 !important;
 }
 
-/* Տեքստը դարձնում ենք թեք (italic) */
 textarea, input[type="text"] {
     background: #f7f2ed !important;
     border: 1.5px solid #ddd5c9 !important;
@@ -161,5 +156,4 @@ with gr.Blocks(title="Lumina — Text to Image") as app:
         outputs=output,
     )
 
-# CSS-ը փոխանցվում է launch-ին, ինչպես պահանջում է Gradio 6.0-ը
 app.launch(css=css)

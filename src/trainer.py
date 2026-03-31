@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 # ─────────────────────────────────────────────────────────────
-#  GPU Temperature helpers
+#  GPU Temperature Helpers
 # ─────────────────────────────────────────────────────────────
 
 def _get_gpu_temp() -> int | None:
@@ -32,31 +32,24 @@ def _get_gpu_temp() -> int | None:
 
 
 def cooling_pause(cooldown_seconds: int, temp_limit: int = 83):
-    """
-    Epoch-ի վերջում GPU-ն հանգստացնում է։
-    - Սպասում է cooldown_seconds-ը
-    - Եթե GPU temp > temp_limit, սպասում է մինչև temp_limit-10-ից ցածր
-    """
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
 
     temp = _get_gpu_temp()
     temp_str = f" (GPU: {temp}°C)" if temp is not None else ""
-    logger.info(f"⏸  Epoch ավարտ{temp_str} — սկսում է {cooldown_seconds // 60} րոպե cooling pause…")
+    logger.info(f"⏸  Epoch finished{temp_str} — starting {cooldown_seconds // 60} min cooling pause…")
     print(f"\n{'─'*55}")
-    print(f"  ⏸  Cooling pause — {cooldown_seconds // 60} րոպե{temp_str}")
+    print(f"  ⏸  Cooling pause — {cooldown_seconds // 60} min{temp_str}")
     print(f"{'─'*55}")
 
-    # Base cooldown — progress bar-ով
     for remaining in tqdm(range(cooldown_seconds, 0, -1),
                           desc="  Cooling", unit="s",
                           bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt}s"):
         time.sleep(1)
 
-    # Եթե GPU-ն դեռ տաք է, շարունակել սպասել
     if temp is not None and temp > temp_limit:
         target = temp_limit - 10
-        print(f"  🌡  GPU {temp}°C > {temp_limit}°C limit, սպասում ենք մինչև {target}°C…")
+        print(f"  🌡  GPU {temp}°C > {temp_limit}°C limit, waiting until {target}°C…")
         while True:
             time.sleep(15)
             current = _get_gpu_temp()
@@ -66,8 +59,8 @@ def cooling_pause(cooldown_seconds: int, temp_limit: int = 83):
 
     final_temp = _get_gpu_temp()
     temp_str = f" (GPU: {final_temp}°C)" if final_temp is not None else ""
-    print(f"  ✅  Cooling ավարտ{temp_str} — շարունակում ենք թրեյնինգը\n")
-    logger.info(f"Cooling pause ավարտ{temp_str}")
+    print(f"  ✅  Cooling finished{temp_str} — resuming training\n")
+    logger.info(f"Cooling pause finished{temp_str}")
 
 
 # ─────────────────────────────────────────────────────────────
@@ -77,7 +70,6 @@ def cooling_pause(cooldown_seconds: int, temp_limit: int = 83):
 class LoRATrainer:
     """
     Main trainer class for LoRA fine-tuning of Stable Diffusion.
-    Ավելացված՝ epoch-ների արանքում cooling pause + GPU temp monitoring.
     """
 
     def __init__(self, config: dict, models: dict, dataset):
@@ -132,7 +124,6 @@ class LoRATrainer:
         return SequentialLR(optimizer, schedulers=[warmup, cosine], milestones=[warmup_steps])
 
     def _log_gpu_stats(self):
-        """Loggerում GPU stats-ը։"""
         temp = _get_gpu_temp()
         if torch.cuda.is_available():
             allocated = torch.cuda.memory_allocated() / 1024 ** 3
@@ -266,7 +257,6 @@ class LoRATrainer:
                             step=self.global_step,
                         )
 
-            # ── Epoch ավարտ ────────────────────────────────────
             epoch_time = (time.time() - epoch_start) / 60
             avg_epoch_loss = epoch_loss / len(dataloader)
             temp = _get_gpu_temp()
@@ -277,7 +267,6 @@ class LoRATrainer:
                 f"time: {epoch_time:.1f}min{temp_str}"
             )
 
-            # Cooling pause — վերջին epoch-ից հետո ՉԻ անում
             is_last_epoch = (epoch == num_epochs - 1)
             if not is_last_epoch and self.accelerator.is_main_process:
                 cooling_pause(self.cooldown_seconds, self.gpu_temp_limit)

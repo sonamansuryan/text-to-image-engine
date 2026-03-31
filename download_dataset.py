@@ -6,8 +6,8 @@ dataset = load_dataset(
     split="train[:8000]"
 )
 
-print(f"Ընդհանուր տողեր: {len(dataset)}")
+print(f"Total rows: {len(dataset)}")
 print(f"Columns: {dataset.column_names}")
 
 dataset.save_to_disk("./diffusiondb_8000")
-print("Պահպանված է!")
+print("Saved!")
