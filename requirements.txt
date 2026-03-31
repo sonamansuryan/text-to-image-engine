@@ -1,0 +1,42 @@
+# ============================================================
+#  Text-to-Image Fine-tuning — Requirements
+#  Install: pip install -r requirements.txt
+# ============================================================
+
+# Core ML frameworks
+torch>=2.1.0
+torchvision>=0.16.0
+
+# HuggingFace ecosystem
+diffusers>=0.27.0
+transformers>=4.38.0
+accelerate>=0.27.0
+datasets>=2.17.0
+peft>=0.10.0                # LoRA support
+
+# Image processing
+Pillow>=10.0.0
+
+# Training utilities
+tqdm>=4.66.0
+numpy>=1.24.0
+
+# Config
+PyYAML>=6.0
+
+# Logging / monitoring
+tensorboard>=2.15.0
+
+# Memory-efficient attention (optional but strongly recommended)
+# xformers>=0.0.24            # Uncomment if on Linux with CUDA
+
+# Evaluation metrics (optional)
+# torch-fidelity>=0.3.0       # FID score
+# pytorch-fid>=0.3.0          # Alternative FID
+
+# Hugging Face Hub (for downloading models)
+huggingface-hub>=0.20.0
+
+# Additional utilities
+safetensors>=0.4.0
+scipy>=1.11.0

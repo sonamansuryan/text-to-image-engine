@@ -1,0 +1,64 @@
+# ============================================================
+#  LoRA Fine-tuning Config — Stable Diffusion 1.5
+# ============================================================
+
+# Model
+model:
+  pretrained_model_name: "runwayml/stable-diffusion-v1-5"
+  revision: null
+
+# Dataset
+data:
+  dataset_path: "./diffusiondb_8000"
+  image_column: "image"
+  caption_column: "prompt"
+  resolution: 512
+  center_crop: true
+  random_flip: true
+
+# LoRA
+lora:
+  rank: 4
+  alpha: 32
+  dropout: 0.1
+  target_modules:
+    - "to_q"
+    - "to_k"
+    - "to_v"
+    - "to_out.0"
+
+# Training
+training:
+  output_dir: "./outputs"
+  logging_dir: "./logs"
+  seed: 42
+  num_train_epochs: 3
+  train_batch_size: 1
+  gradient_accumulation_steps: 8
+  gradient_checkpointing: true
+  mixed_precision: "fp16"
+  learning_rate: 1.0e-4
+  lr_scheduler: "cosine"
+  lr_warmup_steps: 100
+  max_grad_norm: 1.0
+  save_steps: 200
+  logging_steps: 10
+  checkpointing_steps: 500
+  max_train_steps: null
+  # ── Cooling ──────────────────────────────────────────────
+  epoch_cooldown_seconds: 300
+  gpu_temp_limit: 83
+
+# Validation
+validation:
+  num_validation_images: 4
+  validation_prompt: "a beautiful landscape, detailed, high quality"
+  validation_epochs: 1
+
+# Optimizer
+optimizer:
+  name: "AdamW"
+  beta1: 0.9
+  beta2: 0.999
+  weight_decay: 0.01
+  epsilon: 1.0e-8
