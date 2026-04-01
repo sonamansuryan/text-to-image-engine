@@ -20,7 +20,7 @@ A LoRA fine-tuning pipeline for **Stable Diffusion 1.5**, trained on 8,000 sampl
 > └── lumina_ui.png   ← rename your Screenshot_2026-03-31_231400.png to this
 > ```
 
-![lumina_ui.png](assets/lumina_ui.png)
+![lumina_ui.png](assets/lumina.png)
 
 ---
 
