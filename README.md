@@ -1,4 +1,3 @@
-
 # Lumina — LoRA Fine-tuned Stable Diffusion
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
@@ -7,6 +6,8 @@
 [![PEFT](https://img.shields.io/badge/PEFT-LoRA-00A67E?logo=huggingface&logoColor=white)](https://github.com/huggingface/peft)
 [![Gradio](https://img.shields.io/badge/Gradio-UI-FF7C00?logo=gradio&logoColor=white)](https://www.gradio.app/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+> This project was developed as part of the **Generative AI** course at the **National Polytechnic University of Armenia (NPUA)**.
 
 A LoRA fine-tuning pipeline for **Stable Diffusion 1.5**, trained on 8,000 samples from [DiffusionDB](https://github.com/poloclub/diffusiondb). Includes a full training loop with GPU thermal management, evaluation suite with CLIP + aesthetic scoring, and a custom Gradio web UI called **Lumina**.
 
